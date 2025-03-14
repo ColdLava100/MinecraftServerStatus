@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bedrock Server Status</title>
+</head>
+<body>
+    <h1>Server Status</h1>
+    <p id="status">Checking...</p>
+
+    <script>
+        async function checkServer() {
+            const serverIP = "yourserver.ddns.net"; // Change to your No-IP hostname
+            const serverPort = "19132"; // Change to your Bedrock port
+            const apiUrl = `https://api.mcsrvstat.us/bedrock/2/${serverIP}:${serverPort}`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.online) {
+                    document.getElementById("status").innerHTML = 
+                        `✅ Online - ${data.players.online}/${data.players.max} players`;
+                } else {
+                    document.getElementById("status").innerHTML = "❌ Offline";
+                }
+            } catch (error) {
+                document.getElementById("status").innerHTML = "❌ Error fetching status";
+            }
+        }
+
+        checkServer();
+        setInterval(checkServer, 30000); // Refresh every 30 seconds
+    </script>
+</body>
+</html>
