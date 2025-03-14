@@ -1,38 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Minecraft Server Status</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Status</title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1>Java Server Status</h1>
-    <p><strong>IP:</strong> <span id="java-ip">coldlava.ddns.net</span></p>
-    <p><strong>Port:</strong> <span id="java-port">16359</span></p>
-    <p id="java-status">Checking...</p>
-    <h2>Online Players:</h2>
-    <ul id="java-player-list">Loading...</ul>
+    <div class="container">
+        <h1>Java Server Status</h1>
+        <p><strong>IP:</strong> <span id="java-ip">coldlava.ddns.net</span></p>
+        <p><strong>Port:</strong> <span id="java-port">16359</span></p>
+        <p id="java-status" class="status">Checking...</p>
+        <h2>Online Players:</h2>
+        <ul id="java-player-list">Loading...</ul>
 
-    <h1>Bedrock Server Status</h1>
-    <p><strong>IP:</strong> <span id="bedrock-ip">coldlavabedrock.ddns.net</span></p>
-    <p><strong>Port:</strong> <span id="bedrock-port">58942</span></p>
-    <p id="bedrock-status">Checking...</p>
-    <h2>Online Players:</h2>
-    <ul id="bedrock-player-list">Loading...</ul>
+        <h1>Bedrock Server Status</h1>
+        <p><strong>IP:</strong> <span id="bedrock-ip">coldlavabedrock.ddns.net</span></p>
+        <p><strong>Port:</strong> <span id="bedrock-port">58942</span></p>
+        <p id="bedrock-status" class="status">Checking...</p>
+        <h2>Online Players:</h2>
+        <ul id="bedrock-player-list">Loading...</ul>
+    </div>
 
     <script>
-        async function checkJavaServer() {
-            const ip = "coldlava.ddns.net";
-            const port = "16359";
-            const url = `https://api.mcsrvstat.us/2/${ip}:${port}`;
+        async function checkServer(type, ip, port, statusId, playerListId) {
+            const url = type === "java" 
+                ? `https://api.mcsrvstat.us/2/${ip}:${port}` 
+                : `https://api.mcsrvstat.us/bedrock/2/${ip}:${port}`;
 
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                const statusElement = document.getElementById("java-status");
-                const playerListElement = document.getElementById("java-player-list");
+                const statusElement = document.getElementById(statusId);
+                const playerListElement = document.getElementById(playerListId);
 
                 if (data.online) {
                     statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
+                    statusElement.className = "status online";
 
                     if (data.players.list && data.players.list.length > 0) {
                         playerListElement.innerHTML = data.players.list.map(player => `<li>${player}</li>`).join('');
@@ -41,45 +46,18 @@
                     }
                 } else {
                     statusElement.innerText = "❌ Offline";
+                    statusElement.className = "status offline";
                     playerListElement.innerHTML = "<li>Server is offline</li>";
                 }
             } catch (error) {
-                document.getElementById("java-status").innerText = "⚠️ Error checking status";
-                document.getElementById("java-player-list").innerHTML = "<li>Could not retrieve player list</li>";
+                document.getElementById(statusId).innerText = "⚠️ Error checking status";
+                document.getElementById(statusId).className = "status maintenance";
+                document.getElementById(playerListId).innerHTML = "<li>Could not retrieve player list</li>";
             }
         }
 
-        async function checkBedrockServer() {
-            const ip = "coldlavabedrock.ddns.net";
-            const port = "58942";
-            const url = `https://api.mcsrvstat.us/bedrock/2/${ip}:${port}`;
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                const statusElement = document.getElementById("bedrock-status");
-                const playerListElement = document.getElementById("bedrock-player-list");
-
-                if (data.online) {
-                    statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
-
-                    if (data.players.list && data.players.list.length > 0) {
-                        playerListElement.innerHTML = data.players.list.map(player => `<li>${player}</li>`).join('');
-                    } else {
-                        playerListElement.innerHTML = "<li>No players online</li>";
-                    }
-                } else {
-                    statusElement.innerText = "❌ Offline";
-                    playerListElement.innerHTML = "<li>Server is offline</li>";
-                }
-            } catch (error) {
-                document.getElementById("bedrock-status").innerText = "⚠️ Error checking status";
-                document.getElementById("bedrock-player-list").innerHTML = "<li>Could not retrieve player list</li>";
-            }
-        }
-
-        checkJavaServer();
-        checkBedrockServer();
+        checkServer("java", "coldlava.ddns.net", "16359", "java-status", "java-player-list");
+        checkServer("bedrock", "coldlavabedrock.ddns.net", "58942", "bedrock-status", "bedrock-player-list");
     </script>
 </body>
 </html>
