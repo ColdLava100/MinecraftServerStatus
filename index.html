@@ -7,29 +7,49 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="logo">
             <img src="logo.png" alt="Server Logo">
         </div>
     </nav>
-    
+
     <div class="container">
         <h1>Java Server Status</h1>
-        <p><strong>IP:</strong> <span id="java-ip">coldlava.ddns.net</span></p>
-        <p><strong>Port:</strong> <span id="java-port">16359</span></p>
+        <p><strong>IP:</strong> <span id="java-ip">coldlava.ddns.net</span> 
+            <button class="copy-btn" onclick="copyText('java-ip')">📋 Copy</button>
+        </p>
+        <p><strong>Port:</strong> <span id="java-port">16359</span> 
+            <button class="copy-btn" onclick="copyText('java-port')">📋 Copy</button>
+        </p>
         <p id="java-status" class="status">Checking...</p>
         <h2>Online Players:</h2>
         <ul id="java-player-list">Loading...</ul>
 
         <h1>Bedrock Server Status</h1>
-        <p><strong>IP:</strong> <span id="bedrock-ip">coldlavabedrock.ddns.net</span></p>
-        <p><strong>Port:</strong> <span id="bedrock-port">58942</span></p>
+        <p><strong>IP:</strong> <span id="bedrock-ip">coldlavabedrock.ddns.net</span> 
+            <button class="copy-btn" onclick="copyText('bedrock-ip')">📋 Copy</button>
+        </p>
+        <p><strong>Port:</strong> <span id="bedrock-port">58942</span> 
+            <button class="copy-btn" onclick="copyText('bedrock-port')">📋 Copy</button>
+        </p>
         <p id="bedrock-status" class="status">Checking...</p>
         <h2>Online Players:</h2>
         <ul id="bedrock-player-list">Loading...</ul>
     </div>
 
     <script>
+        // Function to Copy Text
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Copied: " + text);
+            }).catch(err => {
+                console.error("Failed to copy", err);
+            });
+        }
+
         async function checkServer(type, ip, port, statusId, playerListId) {
             const url = type === "java" 
                 ? `https://api.mcsrvstat.us/2/${ip}:${port}` 
