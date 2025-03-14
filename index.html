@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Bedrock Server Status</title>
+    <title>My Java Server Status</title>
 </head>
 <body>
     <h1>Server Status</h1>
@@ -12,11 +12,11 @@
             const ip = "coldlava.ddns.net";
             const port = "16359";
             const url = `https://api.mcsrvstat.us/2/${ip}:${port}`;
-    
+
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-    
+
                 if (data.online) {
                     document.getElementById("status").innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
                 } else {
@@ -26,7 +26,9 @@
                 document.getElementById("status").innerText = "⚠️ Error checking status";
             }
         }
-    </script>
 
+        // Call the function after defining it
+        checkJavaServer();
+    </script>
 </body>
 </html>
