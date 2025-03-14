@@ -8,28 +8,25 @@
     <p id="status">Checking...</p>
 
     <script>
-        async function checkServer() {
-            const serverIP = "coldlava.ddns.net"; // Change to your No-IP hostname
-            const serverPort = "16359"; // Change to your Bedrock port
-            const apiUrl = `https://api.mcsrvstat.us/bedrock/2/${serverIP}:${serverPort}`;
-
+        async function checkJavaServer() {
+            const ip = "coldlava.ddns.net";
+            const port = "16359";
+            const url = `https://api.mcsrvstat.us/2/${ip}:${port}`;
+    
             try {
-                const response = await fetch(apiUrl);
+                const response = await fetch(url);
                 const data = await response.json();
-
+    
                 if (data.online) {
-                    document.getElementById("status").innerHTML = 
-                        `✅ Online - ${data.players.online}/${data.players.max} players`;
+                    document.getElementById("status").innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
                 } else {
-                    document.getElementById("status").innerHTML = "❌ Offline";
+                    document.getElementById("status").innerText = "❌ Offline";
                 }
             } catch (error) {
-                document.getElementById("status").innerHTML = "❌ Error fetching status";
+                document.getElementById("status").innerText = "⚠️ Error checking status";
             }
         }
-
-        checkServer();
-        setInterval(checkServer, 30000); // Refresh every 30 seconds
     </script>
+
 </body>
 </html>
