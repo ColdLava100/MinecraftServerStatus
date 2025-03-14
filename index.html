@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Java Server Status</title>
+    <title>My Minecraft Server Status</title>
 </head>
 <body>
-    <h1>Server Status</h1>
-    <p><strong>IP:</strong> <span id="ip">coldlava.ddns.net</span></p>
-    <p><strong>Port:</strong> <span id="port">16359</span></p>
-    <p id="status">Checking...</p>
+    <h1>Java Server Status</h1>
+    <p><strong>IP:</strong> <span id="java-ip">coldlava.ddns.net</span></p>
+    <p><strong>Port:</strong> <span id="java-port">16359</span></p>
+    <p id="java-status">Checking...</p>
     <h2>Online Players:</h2>
-    <ul id="player-list">Loading...</ul>
+    <ul id="java-player-list">Loading...</ul>
+
+    <h1>Bedrock Server Status</h1>
+    <p><strong>IP:</strong> <span id="bedrock-ip">coldlavabedrock.ddns.net</span></p>
+    <p><strong>Port:</strong> <span id="bedrock-port">58942</span></p>
+    <p id="bedrock-status">Checking...</p>
+    <h2>Online Players:</h2>
+    <ul id="bedrock-player-list">Loading...</ul>
 
     <script>
         async function checkJavaServer() {
@@ -20,8 +27,8 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                const statusElement = document.getElementById("status");
-                const playerListElement = document.getElementById("player-list");
+                const statusElement = document.getElementById("java-status");
+                const playerListElement = document.getElementById("java-player-list");
 
                 if (data.online) {
                     statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
@@ -36,12 +43,42 @@
                     playerListElement.innerHTML = "<li>Server is offline</li>";
                 }
             } catch (error) {
-                document.getElementById("status").innerText = "⚠️ Error checking status";
-                document.getElementById("player-list").innerHTML = "<li>Could not retrieve player list</li>";
+                document.getElementById("java-status").innerText = "⚠️ Error checking status";
+                document.getElementById("java-player-list").innerHTML = "<li>Could not retrieve player list</li>";
+            }
+        }
+
+        async function checkBedrockServer() {
+            const ip = "coldlavabedrock.ddns.net";
+            const port = "58942";
+            const url = `https://api.mcsrvstat.us/bedrock/2/${ip}:${port}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                const statusElement = document.getElementById("bedrock-status");
+                const playerListElement = document.getElementById("bedrock-player-list");
+
+                if (data.online) {
+                    statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
+
+                    if (data.players.list && data.players.list.length > 0) {
+                        playerListElement.innerHTML = data.players.list.map(player => `<li>${player}</li>`).join('');
+                    } else {
+                        playerListElement.innerHTML = "<li>No players online</li>";
+                    }
+                } else {
+                    statusElement.innerText = "❌ Offline";
+                    playerListElement.innerHTML = "<li>Server is offline</li>";
+                }
+            } catch (error) {
+                document.getElementById("bedrock-status").innerText = "⚠️ Error checking status";
+                document.getElementById("bedrock-player-list").innerHTML = "<li>Could not retrieve player list</li>";
             }
         }
 
         checkJavaServer();
+        checkBedrockServer();
     </script>
 </body>
 </html>
