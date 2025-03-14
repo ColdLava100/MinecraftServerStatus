@@ -52,7 +52,7 @@ async function checkServer(type, ip, port, statusId, playerListId, lastCheckedId
 }
 
 // Initial server status check
-checkServer("java", "coldlava.ddns.net", "16359", "java-status", "java-player-list", "java-last-checked");
+checkServer("java", "coldlava.ddns.net", "59490", "java-status", "java-player-list", "java-last-checked");
 checkServer("bedrock", "coldlavabedrock.ddns.net", "58942", "bedrock-status", "bedrock-player-list", "bedrock-last-checked");
 
 // Auto refresh every 60 seconds
