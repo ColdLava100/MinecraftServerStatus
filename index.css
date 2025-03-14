@@ -5,10 +5,7 @@ body {
     color: #ffffff;
     text-align: center;
     padding: 20px;
-}
-
-h1, h2 {
-    color: #00c3ff;
+    margin: 0;
 }
 
 /* Navigation Bar */
@@ -29,17 +26,17 @@ h1, h2 {
     height: 40px;
 }
 
-/* Container (Adjusted for Fixed Navbar) */
+/* Container */
 .container {
     max-width: 600px;
-    margin: 80px auto 0; /* Push down content */
+    margin: 80px auto 0;
     background-color: #2a2a2a;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0, 255, 255, 0.3);
 }
 
-/* Server Info Section */
+/* Server Info */
 p {
     font-size: 18px;
     margin: 10px 0;
@@ -81,6 +78,22 @@ li {
     margin: 5px;
     border-radius: 5px;
     display: inline-block;
+}
+
+/* Copy Button */
+.copy-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
 }
 
 /* Responsive Design */
