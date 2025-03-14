@@ -5,7 +5,11 @@
 </head>
 <body>
     <h1>Server Status</h1>
+    <p><strong>IP:</strong> <span id="ip">coldlava.ddns.net</span></p>
+    <p><strong>Port:</strong> <span id="port">16359</span></p>
     <p id="status">Checking...</p>
+    <h2>Online Players:</h2>
+    <ul id="player-list">Loading...</ul>
 
     <script>
         async function checkJavaServer() {
@@ -16,18 +20,27 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
+                const statusElement = document.getElementById("status");
+                const playerListElement = document.getElementById("player-list");
 
                 if (data.online) {
-                    document.getElementById("status").innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
+                    statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
+
+                    if (data.players.list && data.players.list.length > 0) {
+                        playerListElement.innerHTML = data.players.list.map(player => `<li>${player}</li>`).join('');
+                    } else {
+                        playerListElement.innerHTML = "<li>No players online</li>";
+                    }
                 } else {
-                    document.getElementById("status").innerText = "❌ Offline";
+                    statusElement.innerText = "❌ Offline";
+                    playerListElement.innerHTML = "<li>Server is offline</li>";
                 }
             } catch (error) {
                 document.getElementById("status").innerText = "⚠️ Error checking status";
+                document.getElementById("player-list").innerHTML = "<li>Could not retrieve player list</li>";
             }
         }
 
-        // Call the function after defining it
         checkJavaServer();
     </script>
 </body>
