@@ -14,49 +14,124 @@ function copyText(elementId) {
     });
 }
 
-// Function to check server status
-async function checkServer(type, ip, port, statusId, playerListId, lastCheckedId) {
-    const url = type === "java" 
-        ? `https://api.mcsrvstat.us/2/${ip}:${port}` 
-        : `https://api.mcsrvstat.us/bedrock/2/${ip}:${port}`;
+// Track the last alert time to avoid spam
+let lastAlertTime = 0; // Stores the timestamp of the last alert
+
+// Function to send WhatsApp alert when the server is down
+async function sendWhatsAppMessage(message) {
+    const phoneNumber = "60126479378"; // Replace with your WhatsApp number (Malaysia: 60XXXXXXXXX)
+    const apiKey = "4946605"; // Replace with your CallMeBot API key
+
+    const url = `https://api.callmebot.com/whatsapp.php?phone=${phoneNumber}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
 
     try {
         const response = await fetch(url);
-        const data = await response.json();
-        const statusElement = document.getElementById(statusId);
-        const playerListElement = document.getElementById(playerListId);
-        const lastCheckedElement = document.getElementById(lastCheckedId);
-
-        if (data.online) {
-            statusElement.innerText = `✅ Online - ${data.players.online}/${data.players.max} players`;
-            statusElement.className = "status online";
-
-            if (data.players.list && data.players.list.length > 0) {
-                playerListElement.innerHTML = data.players.list.map(player => `<li>${player}</li>`).join('');
-            } else {
-                playerListElement.innerHTML = "<li>No players online</li>";
-            }
+        if (response.ok) {
+            console.log("WhatsApp message sent successfully!");
         } else {
-            statusElement.innerText = "❌ Offline";
-            statusElement.className = "status offline";
-            playerListElement.innerHTML = "<li>Server is offline</li>";
+            console.error("Failed to send WhatsApp message");
         }
-
-        lastCheckedElement.innerText = getCurrentTime(); // Update last-checked time
-
     } catch (error) {
-        document.getElementById(statusId).innerText = "⚠️ Error checking status";
-        document.getElementById(statusId).className = "status maintenance";
-        document.getElementById(playerListId).innerHTML = "<li>Could not retrieve player list</li>";
+        console.error("Error sending WhatsApp message:", error);
     }
 }
 
-// Initial server status check
-checkServer("java", "coldlava.ddns.net", "59490", "java-status", "java-player-list", "java-last-checked");
-checkServer("bedrock", "coldlavabedrock.ddns.net", "58942", "bedrock-status", "bedrock-player-list", "bedrock-last-checked");
+// Java server check function
+async function checkJavaServer(ip, port) {
+    const apiUrl = `https://api.mcsrvstat.us/2/${ip}:${port}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        
+        if (data.players.list && data.players.list.length > 0) {
+            const playerName = data.players.list[0]; // First player in the list
+            const playerHeadUrl = `https://minotar.net/avatar/${playerName}/32`; // Use Minotar API for player head
+
+            // Display player name and head next to it
+            document.getElementById("java-player-list").innerHTML = `<li><img src="${playerHeadUrl}" alt="${playerName}'s head" class="player-head" style="width: 32px; height: 32px; margin-right: 10px;">${playerName}</li>`;
+        } else {
+            document.getElementById("java-player-list").innerText = 'No players online';
+        }
+
+        // Display number of players online and max capacity
+        const onlinePlayers = data.players.online || 0;
+        const maxCapacity = data.players.max || 0;
+        document.getElementById("java-status").innerHTML = `✅ Online (${onlinePlayers}/${maxCapacity})`;
+        document.getElementById("java-status").className = data.online ? 'status online' : 'status offline';
+
+        // Update the last checked time
+        document.getElementById("java-last-checked").innerText = `Last checked: ${getCurrentTime()}`;
+
+        // If the server is offline, send a WhatsApp message
+        if (!data.online) {
+            sendWhatsAppMessage(`Java server is offline at ${getCurrentTime()}`);
+        }
+
+    } catch (error) {
+        console.error('Error fetching Java server data:', error);
+        document.getElementById("java-status").innerText = '⚠️ Error checking status';
+        document.getElementById("java-status").className = 'status maintenance';
+
+        // Update the last checked time
+        document.getElementById("java-last-checked").innerText = `Last checked: ${getCurrentTime()}`;
+
+        // Send a WhatsApp message if there's an error
+        sendWhatsAppMessage(`Error checking Java server at ${getCurrentTime()}`);
+    }
+}
+
+// Bedrock server check function
+function checkBedrockServer() {
+    const apiUrl = 'https://api.mcsrvstat.us/2/coldlava.ddns.net:59490'; // Fixed URL for Bedrock server //ACTUAL BEDROCK URL 58942 
+
+    fetch(apiUrl)
+        .then(response => response.json())  // Parse the response as JSON
+        .then(data => {
+            if (data.info && data.info.html && data.info.html.length > 0) {
+                // Extract the player name from the 'html' field
+                const playerName = data.info.html[0]; // The player name in 'html'
+                document.getElementById("bedrock-player-list").innerHTML = `<li>${playerName}</li>`;
+            } else {
+                document.getElementById("bedrock-player-list").innerText = 'No players online';
+            }
+
+            // Display number of players online and max capacity
+            const onlinePlayers = data.players.online || 0;
+            const maxCapacity = data.players.max || 0;
+            document.getElementById("bedrock-status").innerHTML = `✅ Online (${onlinePlayers}/${maxCapacity})`;
+            document.getElementById("bedrock-status").className = data.online ? 'status online' : 'status offline';
+
+            // Update the last checked time
+            document.getElementById("bedrock-last-checked").innerText = `Last checked: ${getCurrentTime()}`;
+
+            // If the server is offline, send a WhatsApp message
+            if (!data.online) {
+                sendWhatsAppMessage(`Bedrock server is offline at ${getCurrentTime()}`);
+            }
+
+        })
+        .catch(error => {
+            console.error('Error fetching Bedrock player data:', error);
+            document.getElementById("bedrock-status").innerText = '⚠️ Error checking status';
+            document.getElementById("bedrock-status").className = 'status maintenance';
+
+            // Update the last checked time
+            document.getElementById("bedrock-last-checked").innerText = `Last checked: ${getCurrentTime()}`;
+
+            // Send a WhatsApp message if there's an error
+            sendWhatsAppMessage(`Error checking Bedrock server at ${getCurrentTime()}`);
+        });
+}
+
+// Call the functions when the page is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    checkJavaServer("coldlava.ddns.net", "59490"); // Replace with your Java server IP and port
+    checkBedrockServer(); // Call for the Bedrock server
+});
 
 // Auto refresh every 60 seconds
 setInterval(() => {
-    checkServer("java", "coldlava.ddns.net", "59490", "java-status", "java-player-list", "java-last-checked");
-    checkServer("bedrock", "coldlavabedrock.ddns.net", "58942", "bedrock-status", "bedrock-player-list", "bedrock-last-checked");
+    checkJavaServer("coldlava.ddns.net", "59490");
+    checkBedrockServer();
 }, 60000);
