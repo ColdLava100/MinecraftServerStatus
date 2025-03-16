@@ -1,0 +1,153 @@
+/* General Page Styling */
+body {
+    font-family: 'Minecraftia', Arial, sans-serif;
+    background-color: #1a472a; /* Dark Green */
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensures elements are properly spaced */
+    background-color: #2c5e3f;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    margin-left: auto;
+    padding: 0;
+    margin-right: 20px; /* Adds space from right edge */
+}
+
+
+.nav-links li {
+    display: inline;
+    margin-right: 20px; /* Adds spacing to the right */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 15px; /* Adjust padding */
+    border-radius: 5px;
+    transition: background 0.3s;
+    display: inline-block; /* Ensures it doesn't stretch */
+}
+
+.nav-links a:hover {
+    background-color: rgba(76, 175, 80, 0.8); /* Slight transparency for better effect */
+}
+
+
+
+
+/* Push last item to the right */
+.nav-links .right {
+    margin-left: auto;
+}
+
+/* Logo */
+.logo img {
+    height: 40px;
+}
+
+/* Main Content Container */
+.container {
+    max-width: 1500px;
+    margin: 100px auto 0;
+    background-color: #3b7a57; /* Soft Green */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Server Info */
+p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+/* Status Indicators */
+.status {
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Status Colors */
+.online {
+    background-color: #4caf50; /* Minecraft Grass Green */
+    color: #ffffff;
+}
+
+.offline {
+    background-color: #c0392b; /* Dark Red */
+    color: #ffffff;
+}
+
+.maintenance {
+    background-color: #f1c40f; /* Yellow */
+    color: #000000;
+}
+
+/* Player List */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #5a9149; /* Slightly lighter green */
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Copy Button */
+.copy-btn {
+    background-color: #8fbc8f; /* Soft Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.copy-btn:hover {
+    background-color: #4caf50; /* Brighter Grass Green */
+}
+
+.player-head {
+    width: 32px; /* Size of the head */
+    height: 32px;
+    border-radius: 5px; /* Slightly rounded corners */
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+}
