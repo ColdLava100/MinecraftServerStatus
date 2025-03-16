@@ -14,6 +14,11 @@ function copyText(elementId) {
     });
 }
 
+function toggleMenu() {
+    document.querySelector('.nav-links').classList.toggle('show');
+}
+
+
 // Track the last alert time to avoid spam
 let lastAlertTime = 0; // Stores the timestamp of the last alert
 
@@ -38,10 +43,6 @@ async function sendWhatsAppMessage(message) {
 
 let javaPlayers = [];
 let bedrockPlayers = [];
-
-function toggleMenu() {
-    document.querySelector('.nav-links').classList.toggle('show');
-}
 
 
 // Java server check function
