@@ -36,6 +36,10 @@ async function sendWhatsAppMessage(message) {
     }
 }
 
+let javaPlayers = [];
+let bedrockPlayers = [];
+
+
 // Java server check function
 async function checkJavaServer(ip, port) {
     const apiUrl = `https://api.mcsrvstat.us/2/${ip}:${port}`;
@@ -45,14 +49,18 @@ async function checkJavaServer(ip, port) {
         const data = await response.json();
         
         if (data.players.list && data.players.list.length > 0) {
-            const playerName = data.players.list[0]; // First player in the list
-            const playerHeadUrl = `https://minotar.net/avatar/${playerName}/32`; // Use Minotar API for player head
-
-            // Display player name and head next to it
-            document.getElementById("java-player-list").innerHTML = `<li><img src="${playerHeadUrl}" alt="${playerName}'s head" class="player-head" style="width: 32px; height: 32px; margin-right: 10px;">${playerName}</li>`;
+            const playerListElement = document.getElementById("java-player-list");
+            playerListElement.innerHTML = ''; // Clear existing list
+        
+            data.players.list.forEach(playerName => {
+                const playerHeadUrl = `https://minotar.net/avatar/${playerName}/32`;
+                const listItem = `<li><img src="${playerHeadUrl}" alt="${playerName}'s head" class="player-head" style="width: 32px; height: 32px; margin-right: 10px;">${playerName}</li>`;
+                playerListElement.innerHTML += listItem;
+            });
         } else {
             document.getElementById("java-player-list").innerText = 'No players online';
         }
+        
 
         // Display number of players online and max capacity
         const onlinePlayers = data.players.online || 0;
@@ -89,12 +97,17 @@ function checkBedrockServer() {
         .then(response => response.json())  // Parse the response as JSON
         .then(data => {
             if (data.info && data.info.html && data.info.html.length > 0) {
-                // Extract the player name from the 'html' field
-                const playerName = data.info.html[0]; // The player name in 'html'
-                document.getElementById("bedrock-player-list").innerHTML = `<li>${playerName}</li>`;
+                const playerListElement = document.getElementById("bedrock-player-list");
+                playerListElement.innerHTML = ''; // Clear existing list
+            
+                data.info.html.forEach(playerName => {
+                    const listItem = `<li>${playerName}</li>`;
+                    playerListElement.innerHTML += listItem;
+                });
             } else {
                 document.getElementById("bedrock-player-list").innerText = 'No players online';
             }
+            
 
             // Display number of players online and max capacity
             const onlinePlayers = data.players.online || 0;
