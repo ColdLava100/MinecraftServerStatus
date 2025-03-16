@@ -39,6 +39,10 @@ async function sendWhatsAppMessage(message) {
 let javaPlayers = [];
 let bedrockPlayers = [];
 
+function toggleMenu() {
+    document.querySelector('.nav-links').classList.toggle('show');
+}
+
 
 // Java server check function
 async function checkJavaServer(ip, port) {
