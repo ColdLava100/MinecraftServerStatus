@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server Status</title>
+    <link rel="stylesheet" href="gettingstarted.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><img src="logo.png" alt="Server Logo"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="gettingstarted.html">Getting Started</a></li>
+            <li><a href="http://147.185.221.26:56464" target="_blank">World Map</a></li>
+            <li><a href="plugin.html">Plugin</a></li>
+            <li><a href="#">Changelog</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Getting Started</h1>
+        <p>Welcome to Lokal SMP!</p>
+        
+        <h2>1. Connecting to the Server</h2>
+        <p>Open Minecraft and go to Multiplayer. Click "Add Server" and enter the following details:</p>
+        <p><strong>Java Edition Server Address:</strong> <span class="server-ip">coldlava.ddns.net:59490</span> <button class="copy-btn" onclick="copyIP()">Copy</button></p>
+        <p><strong>Bedrock Edition Address:</strong> <span class="server-ip2">coldlavabedrock.ddns.net:58942</span> <button class="copy-btn" onclick="copyIPbedrock()">Copy</button></p>
+
+        <h2>2. Server Rules</h2>
+        <ul>
+            <li>Be respectful to others.</li>
+            <li>No griefing or stealing.</li>
+            <li>No hacking or exploiting bugs.</li>
+            <li>Keep chat friendly and appropriate.</li>
+        </ul>
+        
+        <h2>3. Useful Commands</h2>
+        <ul>
+            <li><code>/claim</code> - Used for claiming Land.</li>
+            <li><code>/waypoints</code> - Used for making waypoints.</li>
+        </ul>
+    </div>
+
+    <script>
+        function copyIP() {
+            const ip = document.querySelector(".server-ip").innerText;
+            navigator.clipboard.writeText(ip);
+            alert("Server IP copied to clipboard!");
+        }
+
+        function copyIPbedrock() {
+            const ip2 = document.querySelector(".server-ip2").innerText;
+            navigator.clipboard.writeText(ip2);
+            alert("Server IP copied to clipboard!");
+        }
+    </script>
+    <script src="index.js"></script>
+
+</body>
+</html>
