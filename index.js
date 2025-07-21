@@ -96,7 +96,7 @@ async function checkJavaServer(ip, port) {
 
 // Bedrock server check function
 function checkBedrockServer() {
-    const apiUrl = 'https://api.mcsrvstat.us/2/coldlava.ddns.net:59490'; // Fixed URL for Bedrock server //ACTUAL BEDROCK URL 58942 
+    const apiUrl = 'https://api.mcsrvstat.us/2/lokalsmp.ddns.net:59490'; // Fixed URL for Bedrock server //ACTUAL BEDROCK URL 58942 
 
     fetch(apiUrl)
         .then(response => response.json())  // Parse the response as JSON
@@ -144,12 +144,12 @@ function checkBedrockServer() {
 
 // Call the functions when the page is loaded
 document.addEventListener("DOMContentLoaded", function() {
-    checkJavaServer("coldlava.ddns.net", "59490"); // Replace with your Java server IP and port
+    checkJavaServer("lokalsmp.ddns.net", "59490"); // Replace with your Java server IP and port
     checkBedrockServer(); // Call for the Bedrock server
 });
 
 // Auto refresh every 60 seconds
 setInterval(() => {
-    checkJavaServer("coldlava.ddns.net", "59490");
+    checkJavaServer("lokalsmp.ddns.net", "59490");
     checkBedrockServer();
 }, 60000);
