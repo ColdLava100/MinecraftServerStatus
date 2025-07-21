@@ -96,7 +96,7 @@ async function checkJavaServer(ip, port) {
 
 // Bedrock server check function
 function checkBedrockServer() {
-    const apiUrl = 'https://api.mcsrvstat.us/2/lokalsmp.ddns.net:58942'; // Fixed URL for Bedrock server //ACTUAL BEDROCK URL 58942 
+    const apiUrl = 'https://api.mcsrvstat.us/2/lokalsmp.ddns.net:59490'; // Fixed URL for Bedrock server //ACTUAL BEDROCK URL 58942 
 
     fetch(apiUrl)
         .then(response => response.json())  // Parse the response as JSON
